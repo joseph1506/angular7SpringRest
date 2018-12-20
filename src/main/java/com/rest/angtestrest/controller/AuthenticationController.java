@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthenticationController {
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public AuthResponse autheticate(@RequestBody UserDetails userDetails){
         System.out.println(userDetails.getPassword());
         System.out.println(userDetails.getUsername());
@@ -21,6 +21,10 @@ public class AuthenticationController {
                 && "admin".equals(userDetails.getPassword())){
             authResponse.setSuccess(true);
             authResponse.setSecret("Secret of the admin");
+        } else if("joe1506".equals(userDetails.getUsername())
+                && "joe1506".equals(userDetails.getPassword())){
+            authResponse.setSuccess(true);
+            authResponse.setSecret("Secret of the user");
         } else {
             authResponse.setSuccess(false);
             authResponse.setMessage("Invalid Credentials");
