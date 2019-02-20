@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/username").hasAnyRole("ADMIN","USER")
                 .antMatchers("/employees").hasRole("ADMIN")
                 .anyRequest().fullyAuthenticated()
                 .and()
@@ -42,12 +44,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .invalidSessionUrl("/login")
-                .maximumSessions(1)
+                .maximumSessions(2)
                 .expiredUrl("/login");
         http.csrf().disable();
     }
+
+    /*@Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/username");
+    }*/
 
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {

@@ -2,10 +2,18 @@ package com.rest.angtestrest.controller;
 
 import com.rest.angtestrest.dto.AuthResponse;
 import com.rest.angtestrest.dto.UserDetails;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @CrossOrigin
@@ -29,6 +37,19 @@ public class AuthenticationController {
             authResponse.setSuccess(false);
             authResponse.setMessage("Invalid Credentials");
         }
+
+
+        String role = "USER";
+        if(userDetails.getUsername().equalsIgnoreCase("admin")){
+            role="ADMIN";
+        }
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        GrantedAuthority ga = new SimpleGrantedAuthority(role);
+        grantedAuthorities.add(ga);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), "", grantedAuthorities);
+        SecurityContextHolder.getContext().setAuthentication(auth);
         return authResponse;
     }
 
