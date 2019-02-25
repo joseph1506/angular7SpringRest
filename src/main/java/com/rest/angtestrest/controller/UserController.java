@@ -14,14 +14,14 @@ import java.security.Principal;
 public class UserController {
 
     @GetMapping("/username")
-    public boolean currentUserName(Principal principal) {
-        String username = principal.getName();
+    public boolean currentUserName() {
+        /*String username = principal.getName();
         if(StringUtils.isEmpty(username)){
             return false;
         } else {
             return true;
-        }
-        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        }*/
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication!=null){
             String username= (String) authentication.getPrincipal();
             if(StringUtils.isEmpty(username)){
@@ -31,7 +31,7 @@ public class UserController {
             }
         } else {
             return false;
-        }*/
+        }
     }
 
 }

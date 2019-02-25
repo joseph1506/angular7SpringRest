@@ -32,8 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/username").hasAnyRole("ADMIN","USER")
-                .antMatchers("/employees").hasRole("ADMIN")
+                .antMatchers("/username").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .httpBasic()
@@ -55,6 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/username");
     }*/
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {

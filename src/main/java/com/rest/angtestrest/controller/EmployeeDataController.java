@@ -1,6 +1,7 @@
 package com.rest.angtestrest.controller;
 
 import com.rest.angtestrest.dto.Employee;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.List;
 public class EmployeeDataController {
 
     @GetMapping("/employees")
+    @PreAuthorize("hasRole(ADMIN)")
     public List<Employee> getEmployees(){
         List<Employee> employees = new ArrayList<>();
         employees.add(getEmployee("Joseph", "1"));

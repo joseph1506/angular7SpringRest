@@ -2,6 +2,8 @@ package com.rest.angtestrest.controller;
 
 import com.rest.angtestrest.dto.AuthResponse;
 import com.rest.angtestrest.dto.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +21,9 @@ import java.util.List;
 @CrossOrigin
 @RestController
 public class AuthenticationController {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
     public AuthResponse autheticate(@RequestBody UserDetails userDetails){
@@ -48,7 +53,8 @@ public class AuthenticationController {
         GrantedAuthority ga = new SimpleGrantedAuthority(role);
         grantedAuthorities.add(ga);
 
-        Authentication auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), "", grantedAuthorities);
+        UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), grantedAuthorities);
+        Authentication auth = authenticationManager.authenticate(loginToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         return authResponse;
     }
